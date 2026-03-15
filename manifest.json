@@ -1,7 +1,7 @@
 {
   "name": "Content changer",
   "manifest_version": 3,
-  "version": "0.6",
+  "version": "0.8",
   "description": "Apply your own css for anyone site.",
   "permissions": [
     "activeTab",
