@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="frame">
-    <div>
+    <div style="display: flex;">
         <input
             type="text"
             name="field"
@@ -19,15 +19,13 @@
         <button class="edit_button edit_button_apply" id="new_rule_apply">
             Create
         </button>
+        <button class="edit_button" id="delete_all">
+            Delete all
+        </button>
     </div>
+    <div><span>Selectors for <code id="current_domain"></code></span></div>
     <div id="header">
 
-    </div>
-    <div id="footer">
-        <div id="delete_all">
-            <span>Delete all items</span>
-            <img src="images/delete.svg" alt="" draggable="false">
-        </div>
     </div>
     <dialog class="modal_dialog" id="edit_dialog" style="width: 400px">
         <h6>Edit selector:</h6>

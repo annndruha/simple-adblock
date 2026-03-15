@@ -1,7 +1,7 @@
 #frame {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     min-width: 654px;
     min-height: 416px;
     font-size: medium;
@@ -128,7 +128,7 @@
     border: none;
 }
 
-#delete_all {
+/* #delete_all {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -138,6 +138,10 @@
     max-height: 25px;
     padding: 10px 10px 10px 10px;
     margin: 5px;
+} */
+
+#new-manual-selector {
+    width: 462px;
 }
 
 #delete_all:hover{

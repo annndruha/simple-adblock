@@ -15,29 +15,39 @@ function reset_and_close_edit_form() {
 }
 
 function load_notes() {
-    chrome.storage.sync.get(null, (res) => {
-        let header = document.getElementById('header')
-        header.innerHTML = ''
-        for (let [key, value] of Object.entries(res)) {
-            const [domain, selector] = split_value(value)
-            const element = `<div id="${key}" class="note">
-                <div class="half-left">
-                    <img src="images/copy.svg" class="icon_copy"></img>
-                    <span class="domain">${selector}</span>
-                    
-                </div>
-                <div class="half-right">
-                    <img src="images/edit.svg" class="edit_note_button"></img>
-                    <img src="images/delete.svg" class="delete_note_button"></img>
-                </div>
-            </div>`
-            header.innerHTML = header.innerHTML + element
-        }
-        addListener()
+    chrome.tabs.query({ active: true }, (tabs) => {
+        const tab = tabs[0]
+        const url = new URL(tab.url)
+        const current_domain = url.hostname
+        
+        document.getElementById('current_domain').innerText = current_domain
+        chrome.storage.sync.get(null, (res) => {
+            let header = document.getElementById('header')
+            header.innerHTML = ''
+            for (let [key, value] of Object.entries(res)) {
+                const [domain, selector] = split_value(value)
+
+                if (current_domain == domain) {
+                    const element = `<div id="${key}" class="note">
+                            <div class="half-left">
+                                <img src="images/copy.svg" class="icon_copy"></img>
+                                <span class="domain">${selector}</span>
+                                
+                            </div>
+                            <div class="half-right">
+                                <img src="images/edit.svg" class="edit_note_button"></img>
+                                <img src="images/delete.svg" class="delete_note_button"></img>
+                            </div>
+                        </div>`
+                    header.innerHTML = header.innerHTML + element
+                }
+            }
+            addNodeListeners()
+        })
     })
 }
 
-function addListener() {
+function addNodeListeners() {
     $('.delete_note_button').on('click', function (e) {
         e.stopPropagation()
         e.preventDefault()
@@ -65,7 +75,9 @@ function addListener() {
             document.getElementById('new-value').value = selector
         })
     })
+}
 
+document.addEventListener('DOMContentLoaded', () => {
     $('#edit_discard').on('click', function (e) {
         const key = document.getElementById('edit_id').innerHTML
         console.log('Discard edit: ', key)
@@ -113,7 +125,6 @@ function addListener() {
                 load_notes()
             })
         })
-
     })
 
     $('#delete_all').on('click', function (e) {
@@ -123,8 +134,6 @@ function addListener() {
             load_notes()
         })
     })
-}
 
-document.addEventListener('DOMContentLoaded', () => {
     load_notes()
 })

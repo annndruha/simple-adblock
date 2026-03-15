@@ -45,27 +45,10 @@ function applyRules() {
 
 applyRules()
 
-// function retryApplyRules() {
-//     applyRules()
-//     setTimeout(() => {
-//         retryApplyRules()
-//     }, 2000)
-// }
 
-// retryApplyRules()
 
-// Метод 2
-// const style = document.createElement('style');
-// style.textContent = `
-//   .direct {
-//     display: none !important;
-//     visibility: hidden !important;
-//     opacity: 0 !important;
-//     pointer-events: none !important;
-//   }
-// `;
-// document.documentElement.appendChild(style);
 
+// ======================================================== Callbacks for background.js
 let lastClickedElement = null
 
 // Track right-clicked element
