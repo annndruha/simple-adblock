@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="popup.css">
+  <title>Content changer</title>
+</head>
+<body>
+<div class="col">
+  <div class="row">
+    <label for="selector"></label>
+    <input placeholder="selector" type="text" id="selector">
+    <div>.style.setProperty(</div>
+    <label for="ruleproperty"></label>
+    <input placeholder="propertyName" type="text" id="ruleproperty">
+    <div>,</div>
+    <label for="rulevalue"></label>
+    <input placeholder="value" type="text" id="rulevalue">
+    <div>)</div>
+    <input id="apply" type="button" value="Add">
+    <input id="remove" type="button" value="Del">
+  </div>
+  <div class="row">
+    <div class="row">
+      <div>
+        Existing rules for domain:
+      </div>
+      <div id="domain_name">
+        example.com
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" id="rules_list">
+    </div>
+  </div>
+</div>
+  <script src="basic-func.js"></script>
+  <script src="ruleslist.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
