@@ -1,23 +1,28 @@
 {
-  "name": "QuickNotes",
-  "description": "Extension for quick copy saved notes to clipboard",
-  "version": "1.0.0",
+  "name": "Simple adblock",
   "manifest_version": 3,
-  "minimum_chrome_version": "96",
-  "icons":{
-    "96" : "images/app_icon.png"
-  },
-  "background": {
-    "service_worker": "src/background.js"
-  },
+  "version": "0.2",
+  "description": "Hide elements from page",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "all_frames": true,
+      "run_at": "document_end",
+      "js": ["src/contentScript.js"]
+    }
+  ],
   "action": {
-    "default_title": "QuickNotes",
+    "default_title": "Simple adblock",
     "default_popup": "popup.html",
     "default_icon": {"96" : "images/popup_icon.png"}
   },
-  "permissions": [
-    "contextMenus",
-    "storage",
-    "activeTab"
-  ]
+  "icons":{
+    "96" : "images/app_icon.png"
+  }
 }
