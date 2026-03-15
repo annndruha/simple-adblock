@@ -7,7 +7,21 @@
 </head>
 <body>
 <div id="frame">
+    <div>
+        <input
+            type="text"
+            name="field"
+            autocomplete="off"
+            class="edit_input"
+            id="new-manual-selector"
+            placeholder="Selector"
+        />
+        <button class="edit_button edit_button_apply" id="new_rule_apply">
+            Create
+        </button>
+    </div>
     <div id="header">
+
     </div>
     <div id="footer">
         <div id="delete_all">
@@ -16,6 +30,7 @@
         </div>
     </div>
     <dialog class="modal_dialog" id="edit_dialog" style="width: 400px">
+        <h6>Edit selector:</h6>
         <div class="edit_fields">
             <input
                 style="display: none;"

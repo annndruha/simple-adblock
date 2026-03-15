@@ -1,20 +1,21 @@
-function split_value(value){
-    return value.split("||||abs_rand_string||||", 2)
+function split_value(value) {
+    return value.split('||||abs_rand_string||||', 2)
 }
 
-function join_value(domain, selector){
-    return domain + "||||abs_rand_string||||" + selector
+function join_value(domain, selector) {
+    return domain + '||||abs_rand_string||||' + selector
 }
 
-function reset_and_close_edit_form(){
-    document.getElementById("edit_id").innerHTML = ''
-    document.getElementById("domain").value = ''
-    document.getElementById("new-value").value = ''
+function reset_and_close_edit_form() {
+    document.getElementById('edit_id').innerHTML = ''
+    document.getElementById('domain').value = ''
+    document.getElementById('new-manual-selector').value = ''
+    document.getElementById('new-value').value = ''
     window.edit_dialog.close()
 }
 
-function load_notes(){
-    chrome.storage.sync.get(null,  (res) => {
+function load_notes() {
+    chrome.storage.sync.get(null, (res) => {
         let header = document.getElementById('header')
         header.innerHTML = ''
         for (let [key, value] of Object.entries(res)) {
@@ -35,7 +36,6 @@ function load_notes(){
         addListener()
     })
 }
-
 
 function addListener() {
     $('.delete_note_button').on('click', function (e) {
@@ -60,14 +60,14 @@ function addListener() {
 
         chrome.storage.sync.get([key], (res) => {
             const [domain, selector] = split_value(res[key])
-            document.getElementById("edit_id").innerHTML = key
-            document.getElementById("domain").value = domain
-            document.getElementById("new-value").value = selector
+            document.getElementById('edit_id').innerHTML = key
+            document.getElementById('domain').value = domain
+            document.getElementById('new-value').value = selector
         })
     })
 
     $('#edit_discard').on('click', function (e) {
-        const key = document.getElementById("edit_id").innerHTML
+        const key = document.getElementById('edit_id').innerHTML
         console.log('Discard edit: ', key)
         e.stopPropagation()
         e.preventDefault()
@@ -77,9 +77,9 @@ function addListener() {
     $('#edit_apply').on('click', function (e) {
         e.stopPropagation()
         e.preventDefault()
-        const key = document.getElementById("edit_id").innerHTML
+        const key = document.getElementById('edit_id').innerHTML
 
-        const value = join_value(document.getElementById("domain").value, document.getElementById("new-value").value)
+        const value = join_value(document.getElementById('domain').value, document.getElementById('new-value').value)
         console.log('Apply edit: ', key, value)
 
         let json = {}
@@ -91,6 +91,31 @@ function addListener() {
         })
     })
 
+    $('#new_rule_apply').on('click', function (e) {
+        e.stopPropagation()
+        e.preventDefault()
+
+        chrome.tabs.query({ active: true }, (tabs) => {
+            const tab = tabs[0]
+            console.log('URL:', tab.url)
+            let idx = new Date().getTime().toString(36)
+            const url = new URL(tab.url)
+            const domain = url.hostname
+
+            const value = join_value(domain, document.getElementById('new-manual-selector').value)
+            console.log('Apply edit: ', idx, value)
+
+            let json = {}
+            json[idx] = value
+            chrome.storage.sync.set(json, (res) => {
+                console.log('Edit saved', res)
+                reset_and_close_edit_form()
+                load_notes()
+            })
+        })
+
+    })
+
     $('#delete_all').on('click', function (e) {
         e.stopPropagation()
         e.preventDefault()
@@ -100,6 +125,6 @@ function addListener() {
     })
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
     load_notes()
 })
