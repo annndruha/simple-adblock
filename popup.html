@@ -8,7 +8,6 @@
 <body>
 <div id="frame">
     <div id="header">
-
     </div>
     <div id="footer">
         <div id="delete_all">
@@ -19,12 +18,13 @@
     <dialog class="modal_dialog" id="edit_dialog" style="width: 400px">
         <div class="edit_fields">
             <input
+                style="display: none;"
                 type="text"
                 name="field"
                 autocomplete="off"
                 class="edit_input"
-                id="new-comment"
-                placeholder="Comment"
+                id="domain"
+                placeholder="Domain"
             />
             <input
                 type="text"
@@ -32,7 +32,7 @@
                 autocomplete="off"
                 class="edit_input"
                 id="new-value"
-                placeholder="Value to copy"
+                placeholder="Selector"
             />
         </div>
 

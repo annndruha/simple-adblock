@@ -2,13 +2,13 @@ function split_value(value){
     return value.split("||||abs_rand_string||||", 2)
 }
 
-function join_value(comment, whattocopy){
-    return comment + "||||abs_rand_string||||" + whattocopy
+function join_value(domain, selector){
+    return domain + "||||abs_rand_string||||" + selector
 }
 
 function reset_and_close_edit_form(){
     document.getElementById("edit_id").innerHTML = ''
-    document.getElementById("new-comment").value = ''
+    document.getElementById("domain").value = ''
     document.getElementById("new-value").value = ''
     window.edit_dialog.close()
 }
@@ -18,12 +18,12 @@ function load_notes(){
         let header = document.getElementById('header')
         header.innerHTML = ''
         for (let [key, value] of Object.entries(res)) {
-            const [comment, whattocopy] = split_value(value)
+            const [domain, selector] = split_value(value)
             const element = `<div id="${key}" class="note">
                 <div class="half-left">
                     <img src="images/copy.svg" class="icon_copy"></img>
-                    <span class="comment">${comment}</span>
-                    <span class="note_text">${whattocopy}</span>
+                    <span class="domain">${selector}</span>
+                    
                 </div>
                 <div class="half-right">
                     <img src="images/edit.svg" class="edit_note_button"></img>
@@ -38,15 +38,6 @@ function load_notes(){
 
 
 function addListener() {
-    $('.note').on('click', function (e) {
-        e.stopPropagation()
-        e.preventDefault()
-        navigator.clipboard.writeText(e.target.innerText).then(() => {
-            console.log('Copied to clickboard: ', e.target.innerText)
-        })
-        window.close()
-    })
-
     $('.delete_note_button').on('click', function (e) {
         e.stopPropagation()
         e.preventDefault()
@@ -68,15 +59,10 @@ function addListener() {
         window.edit_dialog.showModal()
 
         chrome.storage.sync.get([key], (res) => {
-            const [comment, whattocopy] = split_value(res[key])
+            const [domain, selector] = split_value(res[key])
             document.getElementById("edit_id").innerHTML = key
-            if (comment === "No comment"){
-                document.getElementById("new-comment").value = ''
-            }   
-            else {
-                document.getElementById("new-comment").value = comment
-            }
-            document.getElementById("new-value").value = whattocopy
+            document.getElementById("domain").value = domain
+            document.getElementById("new-value").value = selector
         })
     })
 
@@ -92,8 +78,8 @@ function addListener() {
         e.stopPropagation()
         e.preventDefault()
         const key = document.getElementById("edit_id").innerHTML
-        const value = join_value(document.getElementById("new-comment").value, document.getElementById("new-value").value)
 
+        const value = join_value(document.getElementById("domain").value, document.getElementById("new-value").value)
         console.log('Apply edit: ', key, value)
 
         let json = {}

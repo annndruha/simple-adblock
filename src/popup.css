@@ -21,13 +21,13 @@
     justify-content: start;
 }
 
-.note:hover .note_text {
+/* .note:hover .note_text {
     display: flex;
 }
 
 .note:hover .comment {
     display: none;
-}
+} */
 
 .note {
     display: flex;
