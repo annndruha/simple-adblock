@@ -1,8 +1,8 @@
 {
   "name": "Simple adblock",
   "manifest_version": 3,
-  "version": "1.0.0",
-  "description": "Hide elements from page",
+  "version": "1.0.1",
+  "description": "Manual hiding elements from page",
   "permissions": [
     "contextMenus",
     "activeTab",
@@ -26,6 +26,7 @@
     "default_icon": {"96" : "images/popup_icon.png"}
   },
   "icons":{
-    "96" : "images/app_icon.png"
+    "96" : "images/store_icon96.png",
+    "128" : "images/store_icon128.png"
   }
 }
