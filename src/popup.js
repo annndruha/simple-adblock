@@ -14,6 +14,19 @@ function reset_and_close_edit_form() {
     window.edit_dialog.close()
 }
 
+function saveToFile() {
+    chrome.storage.sync.get(null, (res) => {
+        let now_str = new Date().toISOString()
+        $('<a></a>', {
+            'download': 'simple-adblock-' + now_str.split('T')[0] + '.json',
+            'href': 'data:application/json,' + encodeURIComponent(JSON.stringify(res, null, '\t'))
+        }).appendTo('body').click(() => {
+            $(this).remove()
+        })[0].click()
+        console.log('Save rules to file')
+    })
+}
+
 function load_notes() {
     chrome.tabs.query({ active: true }, (tabs) => {
         const tab = tabs[0]
@@ -132,6 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.clear(() => {
             load_notes()
         })
+    })
+
+    $('#backup_rules').on('click', function (e) {
+        e.stopPropagation()
+        e.preventDefault()
+        saveToFile()
     })
 
     load_notes()
