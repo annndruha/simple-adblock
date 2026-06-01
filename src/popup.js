@@ -30,7 +30,6 @@ function load_notes() {
                 if (current_domain == domain) {
                     const element = `<div id="${key}" class="note">
                             <div class="half-left">
-                                <img src="images/copy.svg" class="icon_copy"></img>
                                 <span class="domain">${selector}</span>
                                 
                             </div>
