@@ -1,13 +1,12 @@
 {
   "name": "Simple adblock",
   "manifest_version": 3,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Manual hiding elements from page",
   "permissions": [
     "contextMenus",
     "activeTab",
-    "storage",
-    "scripting"
+    "storage"
   ],
   "content_scripts": [
     {
