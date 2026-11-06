@@ -2,6 +2,40 @@ function split_value(value) {
     return value.split('||||abs_rand_string||||', 2)
 }
 
+// Безопасно достаёт hostname из вкладки.
+// tab.url может быть undefined/пустым (страница ещё грузится — тогда есть pendingUrl,
+// нет прав, служебная страница) или содержать символы, которые new URL() не принимает.
+function get_tab_hostname(tab) {
+    const raw = tab && (tab.url || tab.pendingUrl)
+    if (!raw) return ''
+
+    try {
+        return new URL(raw).hostname
+    } catch (e) {
+        console.warn('Не удалось разобрать URL через new URL():', raw, e)
+    }
+
+    // Запасной вариант: вытащить хост регуляркой
+    const m = String(raw).trim().match(/^[a-z][a-z0-9+.\-]*:\/\/(?:[^@\/?#]*@)?([^\/?#:]+)/i)
+    if (!m) return ''
+    let host = m[1]
+    try { host = decodeURIComponent(host) } catch (e) { /* оставляем как есть */ }
+
+    // Приводим кириллический домен к punycode (как location.hostname в content-скрипте)
+    try {
+        return new URL('http://' + host).hostname
+    } catch (e) {
+        return host.toLowerCase()
+    }
+}
+
+function get_active_tab(callback) {
+    // currentWindow: true — иначе tabs[0] может оказаться вкладкой из другого окна
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        callback(tabs && tabs[0])
+    })
+}
+
 function join_value(domain, selector) {
     return domain + '||||abs_rand_string||||' + selector
 }
@@ -28,11 +62,9 @@ function saveToFile() {
 }
 
 function load_notes() {
-    chrome.tabs.query({ active: true }, (tabs) => {
-        const tab = tabs[0]
-        const url = new URL(tab.url)
-        const current_domain = url.hostname
-        
+    get_active_tab((tab) => {
+        const current_domain = get_tab_hostname(tab)
+
         document.getElementById('current_domain').innerText = current_domain
         chrome.storage.sync.get(null, (res) => {
             let header = document.getElementById('header')
@@ -119,12 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation()
         e.preventDefault()
 
-        chrome.tabs.query({ active: true }, (tabs) => {
-            const tab = tabs[0]
-            console.log('URL:', tab.url)
+        get_active_tab((tab) => {
+            console.log('URL:', tab && (tab.url || tab.pendingUrl))
             let idx = new Date().getTime().toString(36)
-            const url = new URL(tab.url)
-            const domain = url.hostname
+            const domain = get_tab_hostname(tab)
+            if (!domain) {
+                console.warn('Не удалось определить домен текущей вкладки, правило не сохранено')
+                return
+            }
 
             const value = join_value(domain, document.getElementById('new-manual-selector').value)
             console.log('Apply edit: ', idx, value)
